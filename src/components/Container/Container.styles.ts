@@ -6,8 +6,4 @@ export const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.background};
 `;
 
-export const Body = styled.div`
-  max-width: ${({ theme }) => theme.breakpoints.lg};
-  margin: 0 auto;
-  padding: 82px 16px 16px 16px;
-`;
+export const Body = styled.div``;

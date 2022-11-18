@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   border-bottom: ${({ theme }) => theme.colors.border};
-  position: fixed;
+  top: 0;
+  position: sticky;
   width: 100%;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);

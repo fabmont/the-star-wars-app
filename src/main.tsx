@@ -7,6 +7,7 @@ import App from './App';
 import './index.css';
 import theme from './styles/theme';
 import { PeopleProvider } from './contexts/PeopleContext/PeopleContext';
+import { PlanetsProvider } from './contexts/PlanetsContext/PlanetsContext';
 
 const queryClient = new QueryClient();
 
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <PeopleProvider>
-          <App />
+          <PlanetsProvider>
+            <App />
+          </PlanetsProvider>
         </PeopleProvider>
       </ThemeProvider>
     </QueryClientProvider>
