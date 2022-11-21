@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   border-bottom: ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.background};
   top: 0;
   position: sticky;
   width: 100%;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
 `;
 
 export const InnerWrapper = styled.div`

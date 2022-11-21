@@ -3,6 +3,7 @@ import { lighten } from 'polished';
 
 export const Table = styled.table`
   width: 100%;
+  height: max-content;
   overflow-x: auto;
   border-collapse: collapse;
 `;
@@ -25,5 +26,18 @@ export const Th = styled.th`
 
 export const Td = styled.td`
   padding: 24px;
-  border-bottom: 1px solid ${lighten(0.08, 'black')};
+  border-bottom: ${({ theme }) => theme.colors.border};
+`;
+
+export const CharacterNameButton = styled.button`
+  border: 0;
+  background: 0;
+  text-decoration: underline;
+  color: ${({ theme }) => theme.colors.primary};
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+
+  &:hover {
+    color: ${({ theme }) => lighten(0.2, theme.colors.primary)};
+  }
 `;

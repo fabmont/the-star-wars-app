@@ -1,6 +1,10 @@
 import axios from '../axios';
 import PeopleInterface from '../../interfaces/PeopleInterface';
 
+interface QueryParams {
+  name?: string | null;
+}
+
 interface ResponseResult {
   count: number;
   next: string;
@@ -8,8 +12,12 @@ interface ResponseResult {
   results: PeopleInterface[];
 }
 
-export default async function getPeople() {
-  const { data } = await axios.get<ResponseResult>('/people');
+export default async function getPeople(queryParams: QueryParams) {
+  const { data } = await axios.get<ResponseResult>('/people', {
+    params: {
+      search: queryParams.name,
+    },
+  });
 
   return data;
 }
