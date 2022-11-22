@@ -12,6 +12,10 @@ export const ListItem = styled.li`
     opacity: 0.8;
   }
 
+  ul {
+    list-style: none;
+  }
+
   &:not(:last-child) {
     margin-bottom: 12px;
   }

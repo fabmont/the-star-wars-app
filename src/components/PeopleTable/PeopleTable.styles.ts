@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 import { lighten } from 'polished';
 
-export const Table = styled.table`
+export const TableWrapper = styled.div`
   width: 100%;
   height: max-content;
   overflow-x: auto;
+`;
+
+export const Table = styled.table`
+  width: 100%;
+  height: max-content;
   border-collapse: collapse;
 `;
 
@@ -33,6 +38,7 @@ export const CharacterNameButton = styled.button`
   border: 0;
   background: 0;
   text-decoration: underline;
+  text-align: left;
   color: ${({ theme }) => theme.colors.primary};
   cursor: pointer;
   transition: color 0.3s ease-in-out;

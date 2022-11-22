@@ -7,12 +7,14 @@ import PeopleDetails from '../../components/PeopleDetails';
 import PeopleTable from '../../components/PeopleTable';
 import TableLoading from '../../components/TableLoading';
 import Toolbar from '../../components/Toolbar';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getPeople from '../../services/apiRequests/getPeople';
 import * as S from './Home.styles';
 
 const Home: React.FC = () => {
-  const [rerender, setRerender] = useState(0);
+  const { width } = useWindowDimensions();
   const [nameQuery, setNameQuery] = useQueryParam('name', StringParam);
+  const [pageQuery] = useQueryParam('page', StringParam);
   const [selectedCharacterQuery, setSelectedCharacterQuery] = useQueryParam(
     'selected',
     StringParam,
@@ -32,7 +34,6 @@ const Home: React.FC = () => {
 
   const handleChangeNameQuery = (characterName: string) => {
     setNameQuery(characterName);
-    setRerender(Math.random());
   };
 
   const handleSelectUser = (userId: string) => {
@@ -41,13 +42,15 @@ const Home: React.FC = () => {
   };
 
   const toggleDetailsSection = () => {
-    setIsDetailsOpened((prev) => !prev);
     setSelectedCharacterQuery(null);
+    setIsDetailsOpened((prev) => !prev);
   };
+
+  const shouldHidePeopleTable = width < 1024 && isDetailsOpened;
 
   useEffect(() => {
     refetch();
-  }, [rerender]);
+  }, [nameQuery, pageQuery]);
 
   return (
     <Container>
@@ -56,14 +59,16 @@ const Home: React.FC = () => {
         setNameQuery={handleChangeNameQuery}
       />
       <S.Body>
-        {isLoading || isFetching ? (
-          <TableLoading />
-        ) : (
+        {/* {(isLoading || isFetching) && shouldHidePeopleTable && <TableLoading />} */}
+        {(!isLoading || !isFetching) && !shouldHidePeopleTable ? (
           <PeopleTable
             rows={data?.results || []}
             handleSelectUser={handleSelectUser}
           />
+        ) : (
+          !shouldHidePeopleTable && <TableLoading />
         )}
+
         {isDetailsOpened && (
           <PeopleDetails toggleSection={toggleDetailsSection} />
         )}
