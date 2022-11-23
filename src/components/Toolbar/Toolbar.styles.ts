@@ -11,6 +11,10 @@ export const Wrapper = styled.div`
   background: ${({ theme }) => lighten(0.05, theme.colors.background)};
   border-bottom: 1px solid ${darken(0.85, 'white')};
   z-index: 99;
+
+  @media (max-width: 425px) {
+    flex-direction: column;
+  }
 `;
 
 export const SearchInput = styled.input`
@@ -36,6 +40,10 @@ export const PaginationWrapper = styled.div`
 
   .pagination-counter {
     font-size: 12px;
+  }
+
+  @media (max-width: 425px) {
+    margin-top: 16px;
   }
 `;
 

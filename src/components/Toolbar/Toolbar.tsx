@@ -47,8 +47,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
   }, [debouncedValue]);
 
   return (
-    <S.Wrapper>
+    <S.Wrapper data-testId="app-toolbar">
       <S.SearchInput
+        data-testId="search-input"
         placeholder="Search characters..."
         value={searchDisplayValue}
         onChange={handleSearch}
@@ -57,6 +58,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
       {totalPages && (
         <S.PaginationWrapper>
           <S.PaginationButton
+            data-testId="navigation-back-button"
             disabled={!canGoBack || isLoadingData}
             onClick={goToPreviousPage}
           >
@@ -66,6 +68,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             {currentPage} of {totalPages}
           </span>
           <S.PaginationButton
+            data-testId="navigation-next-button"
             disabled={!canGoForward || isLoadingData}
             onClick={goToNextPage}
           >

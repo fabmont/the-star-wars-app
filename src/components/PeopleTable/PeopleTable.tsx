@@ -8,12 +8,14 @@ interface PeopleTableProps {
   // eslint-disable-next-line no-unused-vars
   handleSelectUser: (userId: string) => void;
   error: string | null;
+  isDetailsOpened?: boolean;
 }
 
 const PeopleTable: React.FC<PeopleTableProps> = ({
   rows,
   handleSelectUser,
   error,
+  isDetailsOpened,
 }) => {
   const onCharacterSelect = (characterUrl: string) => {
     const characterId = characterUrl
@@ -24,7 +26,10 @@ const PeopleTable: React.FC<PeopleTableProps> = ({
   };
 
   return (
-    <S.TableWrapper>
+    <S.TableWrapper
+      data-testId="character-table"
+      isDetailsOpened={isDetailsOpened}
+    >
       <S.Table className="people-table">
         <S.Thead>
           <S.Tr>

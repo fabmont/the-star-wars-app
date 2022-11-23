@@ -1,17 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 
 import Container from '../../components/Container';
 import PeopleDetails from '../../components/PeopleDetails';
 import PeopleTable from '../../components/PeopleTable';
 import TableLoading from '../../components/TableLoading';
 import Toolbar from '../../components/Toolbar';
+import useCharacters from '../../hooks/useCharacters';
 import useHomePage from '../../hooks/useHomePage';
-import getPeople from '../../services/apiRequests/getPeople';
 import * as S from './Home.styles';
 
 const Home: React.FC = () => {
-  const didMount = useRef(false);
   const {
     nameQuery,
     pageQuery,
@@ -25,13 +23,10 @@ const Home: React.FC = () => {
     resetPageCounter,
   } = useHomePage();
 
-  const { isLoading, data, isFetching, refetch, error } = useQuery(
-    ['people'],
-    () => getPeople({ name: nameQuery, page: pageQuery }),
-    {
-      refetchOnWindowFocus: false,
-    },
-  );
+  const { isLoading, data, isFetching, refetch, error } = useCharacters({
+    nameQuery,
+    pageQuery,
+  });
 
   const isPageLoading = isLoading || isFetching;
 
@@ -63,6 +58,7 @@ const Home: React.FC = () => {
             rows={data?.results || []}
             handleSelectUser={handleSelectUser}
             error={(error as { message: string })?.message}
+            isDetailsOpened={isDetailsOpened}
           />
         )}
 

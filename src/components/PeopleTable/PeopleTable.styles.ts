@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 import { lighten } from 'polished';
 
-export const TableWrapper = styled.div`
+export const TableWrapper = styled.div<{ isDetailsOpened?: boolean }>`
   width: 100%;
   height: max-content;
   overflow-x: auto;
+
+  @media (max-width: 1023px) {
+    width: ${({ isDetailsOpened }) => (isDetailsOpened ? 0 : '100%')};
+  }
 `;
 
 export const Table = styled.table`
