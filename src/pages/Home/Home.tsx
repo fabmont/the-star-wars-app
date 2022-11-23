@@ -1,52 +1,39 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
-import { StringParam, useQueryParam } from 'use-query-params';
+import React, { useEffect, useRef } from 'react';
 
 import Container from '../../components/Container';
 import PeopleDetails from '../../components/PeopleDetails';
 import PeopleTable from '../../components/PeopleTable';
 import TableLoading from '../../components/TableLoading';
 import Toolbar from '../../components/Toolbar';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import useHomePage from '../../hooks/useHomePage';
 import getPeople from '../../services/apiRequests/getPeople';
 import * as S from './Home.styles';
 
 const Home: React.FC = () => {
-  const { width } = useWindowDimensions();
-  const [nameQuery, setNameQuery] = useQueryParam('name', StringParam);
-  const [pageQuery] = useQueryParam('page', StringParam);
-  const [selectedCharacterQuery, setSelectedCharacterQuery] = useQueryParam(
-    'selected',
-    StringParam,
-  );
+  const didMount = useRef(false);
+  const {
+    nameQuery,
+    pageQuery,
+    isDetailsOpened,
+    handleChangeNameQuery,
+    handleSelectUser,
+    toggleDetailsSection,
+    goToPreviousPage,
+    goToNextPage,
+    currentPage,
+    resetPageCounter,
+  } = useHomePage();
 
-  const [isDetailsOpened, setIsDetailsOpened] = useState(
-    !!selectedCharacterQuery,
-  );
-
-  const { isLoading, data, isFetching, refetch } = useQuery(
+  const { isLoading, data, isFetching, refetch, error } = useQuery(
     ['people'],
-    () => getPeople({ name: nameQuery }),
+    () => getPeople({ name: nameQuery, page: pageQuery }),
     {
       refetchOnWindowFocus: false,
     },
   );
 
-  const handleChangeNameQuery = (characterName: string) => {
-    setNameQuery(characterName);
-  };
-
-  const handleSelectUser = (userId: string) => {
-    setSelectedCharacterQuery(userId);
-    setIsDetailsOpened(!!userId);
-  };
-
-  const toggleDetailsSection = () => {
-    setSelectedCharacterQuery(null);
-    setIsDetailsOpened((prev) => !prev);
-  };
-
-  const shouldHidePeopleTable = width < 1024 && isDetailsOpened;
+  const isPageLoading = isLoading || isFetching;
 
   useEffect(() => {
     refetch();
@@ -57,16 +44,26 @@ const Home: React.FC = () => {
       <Toolbar
         nameQuery={nameQuery || ''}
         setNameQuery={handleChangeNameQuery}
+        currentPage={currentPage}
+        totalPages={
+          data?.count ? Math.ceil(Number(data?.count || 1) / 10) : null
+        }
+        canGoBack={!!data?.previous}
+        canGoForward={!!data?.next}
+        goToPreviousPage={goToPreviousPage}
+        goToNextPage={goToNextPage}
+        isLoadingData={isLoading || isFetching}
+        resetPageCounter={resetPageCounter}
       />
       <S.Body>
-        {/* {(isLoading || isFetching) && shouldHidePeopleTable && <TableLoading />} */}
-        {(!isLoading || !isFetching) && !shouldHidePeopleTable ? (
+        {isPageLoading ? (
+          <TableLoading />
+        ) : (
           <PeopleTable
             rows={data?.results || []}
             handleSelectUser={handleSelectUser}
+            error={(error as { message: string })?.message}
           />
-        ) : (
-          !shouldHidePeopleTable && <TableLoading />
         )}
 
         {isDetailsOpened && (

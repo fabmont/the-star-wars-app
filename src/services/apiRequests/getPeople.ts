@@ -3,6 +3,7 @@ import PeopleInterface from '../../interfaces/PeopleInterface';
 
 interface QueryParams {
   name?: string | null;
+  page?: string | number | null;
 }
 
 interface ResponseResult {
@@ -16,6 +17,7 @@ export default async function getPeople(queryParams: QueryParams) {
   const { data } = await axios.get<ResponseResult>('/people', {
     params: {
       search: queryParams.name,
+      page: queryParams.page,
     },
   });
 

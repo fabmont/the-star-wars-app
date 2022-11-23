@@ -6,6 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 import { StringParam, useQueryParam } from 'use-query-params';
 import getCharacter from '../../services/apiRequests/getCharacter';
 import getCharacterMovies from '../../services/apiRequests/getCharacterMovies';
+import getCharacterPlanet from '../../services/apiRequests/getCharacterPlanet';
 import getCharacterStarships from '../../services/apiRequests/getCharacterStarships';
 import DetailsItem from './DetailsItem/DetailsItem';
 
@@ -29,6 +30,9 @@ const PeopleDetails: React.FC<PeopleDetailsProps> = ({ toggleSection }) => {
   const starshipIds = character?.starships?.map((item) =>
     item.replace('https://swapi.dev/api/starships/', '').replace('/', ''),
   );
+  const planetId = character?.homeworld
+    .replace('https://swapi.dev/api/planets/', '')
+    .replace('/', '');
 
   const { data: movies, isLoading: isLoadingMovies } = useQuery(
     [`movies/${selectedCharacterQuery}`],
@@ -41,6 +45,14 @@ const PeopleDetails: React.FC<PeopleDetailsProps> = ({ toggleSection }) => {
   const { data: starships, isLoading: isLoadingStarships } = useQuery(
     [`starships/${selectedCharacterQuery}`],
     () => getCharacterStarships(starshipIds || []),
+    {
+      enabled: !isCharacterLoading && !!character,
+    },
+  );
+
+  const { data: planet, isLoading: isLoadingPlanet } = useQuery(
+    [`planet/${selectedCharacterQuery}`],
+    () => getCharacterPlanet(planetId || ''),
     {
       enabled: !isCharacterLoading && !!character,
     },
@@ -72,7 +84,11 @@ const PeopleDetails: React.FC<PeopleDetailsProps> = ({ toggleSection }) => {
           <DetailsItem title="Birth year">{character?.birth_year}</DetailsItem>
           <DetailsItem title="Gender">{character?.gender}</DetailsItem>
           <DetailsItem title="Planet of origin">
-            {character?.homeworld}
+            {isLoadingPlanet ? (
+              <Skeleton height={12} count={1} />
+            ) : (
+              planet?.name
+            )}
           </DetailsItem>
           <DetailsItem title="Appearence in movies">
             {isLoadingMovies ? (

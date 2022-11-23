@@ -4,6 +4,9 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   position: sticky;
   top: 66px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 16px;
   background: ${({ theme }) => lighten(0.05, theme.colors.background)};
   border-bottom: 1px solid ${darken(0.85, 'white')};
@@ -22,5 +25,37 @@ export const SearchInput = styled.input`
   &:active,
   &:focus {
     border: 1px solid ${({ theme }) => darken(0.4, theme.colors.primary)};
+  }
+`;
+
+export const PaginationWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  .pagination-counter {
+    font-size: 12px;
+  }
+`;
+
+export const PaginationButton = styled.button`
+  border: 1px solid ${darken(0.85, 'white')};
+  background: ${darken(0.9, 'white')};
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid ${({ theme }) => darken(0.4, theme.colors.primary)};
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
